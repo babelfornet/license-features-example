@@ -1,0 +1,36 @@
+# From .NET Core
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+
+# Visual Studio Code
+.vscode
+
+# Visual Studio
+.vs/
+
+# Coderush
+.cr/
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Diff tool files
+*.bak
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+bin/
+[Oo]bj/
+[Oo]utput/
+
+# License files
+babel.licenses
