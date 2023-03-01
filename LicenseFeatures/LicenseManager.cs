@@ -51,8 +51,26 @@ namespace LicenseFeatures
 
         public ILicense ValidateLicense()
         {
+            // To validate the license only the public key is required.
+            // The private key is only used to sign the license, and in production the private key
+            // should not be distributed with the application.
+            // The public key should be distributed with the application and used to validate the license.
+
+            // The following signature provider can be used to create and validate the license
+            // as includes both the private key and the public key.
+            var signature = CreateSignature();
+
+            // The public key string can be embedded into the application and used to create a signature
+            // provider used only to validate the license.
+            string publicKey = signature.ExportKeys(publicKeyOnly: true);
+
+            // To create the RSASignature from the public key use the following code
+            var validatingSignature = RSASignature.FromKeys(publicKey);
+
+            // And assign the validating signature provider to the license manager
             var licenseManager = new XmlLicenseManager();
-            licenseManager.SignatureProvider = CreateSignature();
+            licenseManager.SignatureProvider = validatingSignature;
+
             license = licenseManager.Validate(File.ReadAllText(LicenseFileName), typeof(LicenseManager), this);
             return license;
         }
@@ -109,7 +127,7 @@ namespace LicenseFeatures
         }
 
         private RSASignature CreateSignature()
-        {
+        {           
             var rsa = new RSASignature();
             if (File.Exists("Keys.pem"))
             {
